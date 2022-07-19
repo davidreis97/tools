@@ -27,7 +27,7 @@ const SubnetCalculator: NextPage = () => {
     var subnet = getSmallestSubnet(state.ips, state.mustBeUsableAddresses, state.maxMaskSize);
 
     return (
-        <Box width="auto" margin="auto" maxWidth="57em" display="flex" justifyContent="center" flexDir="column">
+        <Box overflow="hidden" width="auto" margin="auto" maxWidth="57em" display="flex" justifyContent="center" flexDir="column">
             <Head>
                 <title>David&apos;s Tools | Subnet Calculator</title>
                 <meta name="description" content="Calculate smallest subnet from a set of IPv4 addresses." />
@@ -74,7 +74,7 @@ const SubnetCalculator: NextPage = () => {
                     </Box>
                 </Box>
                 {/* The following lines of code are the reason why I'm not a frontend dev */}
-                <Box width="27em" margin="0.5em" display="flex" flexDirection="column" padding="1em" borderRadius="xl" borderWidth="thin" borderColor="gray.600">
+                <Box overflow="scroll" width="27em" margin="0.5em" display="flex" flexDirection="column" padding="1em" borderRadius="xl" borderWidth="thin" borderColor="gray.600">
                     <Text paddingBottom="1em" fontFamily="heading" color="gray.400" letterSpacing="wider" fontSize="xs" fontWeight="bold">OUTPUT</Text>
                     <TableContainer>
                         <Table variant='simple'>
