@@ -47,7 +47,7 @@ const SubnetCalculator: NextPage = () => {
                     <Text color="gray.400">.</Text>
                 </Box>
             </Box>
-            <Box display="flex" justifyContent="center" flexWrap="wrap" direction="row">
+            <Box display="flex" justifyContent="center" flexWrap="wrap">
                 <Box margin="0.5em" display="flex" flexDirection="column" padding="1em" borderRadius="xl" borderWidth="thin" borderColor="gray.600">
                     <Text marginBottom="1em" fontFamily="heading" color="gray.400" letterSpacing="wider" fontSize="xs" fontWeight="bold">INPUT</Text>
                     <Textarea placeholder={textAreaPlaceholder} resize="none" height="100%"
