@@ -1,7 +1,8 @@
 import '../styles/globals.css'
 import type { AppProps } from 'next/app'
-import { ChakraProvider } from '@chakra-ui/react'
+import { Box, ChakraProvider } from '@chakra-ui/react'
 import { extendTheme } from '@chakra-ui/react'
+import Footer from '../components/footer'
 
 const theme = extendTheme({
   config: {
@@ -13,7 +14,14 @@ const theme = extendTheme({
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ChakraProvider theme={theme}>
-        <Component {...pageProps} />
+        <Box display="flex" flexDirection="column">
+          <Box flexGrow={1}>
+            <Component {...pageProps} />
+          </Box>
+          <Box>
+            <Footer/>
+          </Box>
+        </Box>
     </ChakraProvider>
   )
 }

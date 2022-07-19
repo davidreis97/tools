@@ -1,27 +1,32 @@
-import { Box, Center, Container, Divider, Link, Stack, Text } from '@chakra-ui/react'
+import { Box, Center, Container, Divider, Heading, Link, Stack, Text } from '@chakra-ui/react'
 import { ExternalLinkIcon } from '@chakra-ui/icons'
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import Footer from '../components/footer'
+import Card from '../components/card'
+import { useRouter } from 'next/router'
 
 const Home: NextPage = () => {
+  var router = useRouter();
+
   return (
-    <Box display="flex" flexDir="column">
+    <Center height="100%" display="flex" flexDir="column">
       <Head>
         <title>David&apos;s Tools</title>
-        <meta name="description" content="Index of programming and network tools" />
+        <meta name="description" content="Collection of useful tools for software development." />
       </Head>
 
-      <Box flexGrow={1}>
-        <Container>
-          <Stack>
-
-          </Stack>
-        </Container>
+      <Box>
+        <Box marginBottom="2em" alignSelf="start">
+          <Heading>David&apos;s Tools</Heading>
+          <Text>Collection of useful tools for software development.</Text>
+        </Box>
+        <Card 
+          title='Subnet Calculator' 
+          subtitle='Calculate the smallest subnet that fits a set of IPv4 addresses.' 
+          onClick={() => router.push("/subnet-calculator")} />
       </Box>
-
-      <Footer/>
-    </Box>
+    </Center>
   )
 }
 
