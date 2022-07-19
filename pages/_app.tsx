@@ -54,7 +54,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ChakraProvider theme={theme}>
         <Box display="flex" flexDirection="column">
-          <Box flexGrow={1}>
+          <Box flexGrow={1} display="flex" justifyContent="center" >
             <Component {...pageProps} />
           </Box>
           <Box>
