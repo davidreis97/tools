@@ -1,10 +1,9 @@
-import '../styles/globals.css'
-import type { AppProps } from 'next/app'
-import { Box, ChakraProvider } from '@chakra-ui/react'
+import { Box, ChakraProvider, extendTheme } from '@chakra-ui/react';
 import { mode } from "@chakra-ui/theme-tools";
-import { extendTheme } from '@chakra-ui/react'
-import '@fontsource/varela-round'
-import Footer from '../components/footer'
+import '@fontsource/varela-round';
+import type { AppProps } from 'next/app';
+import Footer from '../components/footer';
+import '../styles/globals.css';
 
 const theme = extendTheme({
   config: {

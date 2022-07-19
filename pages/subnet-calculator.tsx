@@ -1,9 +1,9 @@
-import { AddIcon, CheckIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons'
-import { Box, Button, Center, Divider, Heading, Input, Stack, Table, TableCaption, TableContainer, Tbody, Td, Text, Textarea, Tfoot, Th, Thead, Tr } from '@chakra-ui/react'
+import { Github } from '@chakra-icons/bootstrap'
+import { QuestionIcon } from '@chakra-ui/icons'
+import { Box, Button, Center, Checkbox, Heading, Link, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Stack, Table, TableContainer, Tbody, Td, Text, Textarea, Tooltip, Tr } from '@chakra-ui/react'
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import { useState } from 'react'
-import Footer from '../components/footer'
 import { getSmallestSubnet } from '../logic/subnet-calculator'
 
 const textAreaPlaceholder = `192.168.1.1
@@ -11,28 +11,68 @@ const textAreaPlaceholder = `192.168.1.1
 ...
 `;
 
+interface SubnetCalculatorState{
+    ips: string[]
+    mustBeUsableAddresses: boolean,
+    maxMaskSize: number,
+}
+
 const SubnetCalculator: NextPage = () => {
-    var [ips, setIps] = useState<string[]>([]);
+    var [state, setState] = useState<SubnetCalculatorState>({
+        ips: [],
+        mustBeUsableAddresses: true,
+        maxMaskSize: 30
+    });
 
-    var subnet = getSmallestSubnet(ips);
-
+    var subnet = getSmallestSubnet(state.ips, state.mustBeUsableAddresses, state.maxMaskSize);
+    
     return (
         <Center height="100%" justifyContent="center" display="flex" flexDir="column">
             <Head>
-                <title>David&apos;s Tools</title>
+                <title>David&apos;s Tools | Subnet Calculator</title>
                 <meta name="description" content="Calculate smallest subnet from a set of IPv4 addresses." />
             </Head>
 
             <Box>
                 <Box marginBottom="2em">
-                    <Heading>Subnet Calculator</Heading>
+                    <Box display="flex" justifyContent="space-between">
+                        <Heading>Subnet Calculator</Heading>
+                        <Button onClick={() => window.open("https://www.github.com/davidreis97/tools", '_blank')?.focus()} colorScheme="gray" leftIcon={<Github/>}>Source Code</Button>
+                    </Box>
                     <Text>Calculate the smallest subnet that fits a set of IPv4 addresses.</Text>
-                    <Text color="gray.400">Found an issue? Please report it TODO.</Text>
+                    <Box display="flex">
+                        <Text color="gray.400">Found an issue? Please report it&nbsp;</Text>
+                        <Link color="gray.400" isExternal textDecorationStyle="dashed" textDecorationThickness="1px" textDecorationLine="underline" href="https://www.github.com/davidreis97/tools/issues">
+                            here
+                        </Link>
+                        <Text color="gray.400">.</Text>
+                    </Box>
                 </Box>
                 <Stack spacing='24px' direction="row">
-                    <Box display="flex" flexDirection="column" width="300px" padding="1em" borderRadius="xl" borderWidth="thin" borderColor="gray.600">
-                        <Text paddingBottom="1em" fontFamily="heading" color="gray.400" letterSpacing="wider" fontSize="xs" fontWeight="bold">INPUT</Text>
-                        <Textarea placeholder={textAreaPlaceholder} resize="none" height="100%" onInput={evt => setIps(evt.currentTarget.value.split(/\r?\n/))} />
+                    <Box display="flex" flexDirection="column" width="350px" padding="1em" borderRadius="xl" borderWidth="thin" borderColor="gray.600">
+                        <Text marginBottom="1em" fontFamily="heading" color="gray.400" letterSpacing="wider" fontSize="xs" fontWeight="bold">INPUT</Text>
+                        <Textarea placeholder={textAreaPlaceholder} resize="none" height="100%" 
+                            onInput={evt => setState((state) => ({...state, ips: (evt.target as HTMLTextAreaElement).value.split(/\r?\n/)}))} />
+                        <Text marginTop="1em" marginBottom="0.5em" fontFamily="heading" color="gray.400" letterSpacing="wider" fontSize="xs" fontWeight="bold">SETTINGS</Text>
+                        <Box display="flex" alignItems="center" justifyContent="space-between">
+                            <Text>Maximum netmask size</Text>
+                            <Tooltip label="Maximum number of bits that the netmask can have."><QuestionIcon/></Tooltip>
+                        </Box>
+                        <NumberInput onChange={(_,maxMaskSize) => setState((s) => ({...s, maxMaskSize}))} min={0} max={32} value={state.maxMaskSize} size="sm">
+                            <NumberInputField />
+                            <NumberInputStepper>
+                                <NumberIncrementStepper />
+                                <NumberDecrementStepper />
+                            </NumberInputStepper>
+                        </NumberInput>
+                        <Box display="flex" alignItems="center" justifyContent="space-between" marginTop="0.5em">
+                            <Checkbox
+                                defaultChecked
+                                onChange={() => setState((s) => ({...s, mustBeUsableAddresses: !state.mustBeUsableAddresses}))}>
+                                    Avoid broadcast and base address
+                            </Checkbox>
+                            <Tooltip label="If set, the addresses provided as input will be within the Min Host and Max Host ip range."><QuestionIcon/></Tooltip>
+                        </Box>
                     </Box>
                     <Box display="flex" flexDirection="column" width="460px" padding="1em" borderRadius="xl" borderWidth="thin" borderColor="gray.600">
                         <Text paddingBottom="1em" fontFamily="heading" color="gray.400" letterSpacing="wider" fontSize="xs" fontWeight="bold">OUTPUT</Text>

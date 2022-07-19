@@ -1,23 +1,32 @@
-export function getSmallestSubnet(ips: string[]) {
+export function getSmallestSubnet(ips: string[], mustBeUsableAddress: boolean, maxMaskSize: number) {
     var addresses = [];
 
+    // Remove characters that are not numbers or dots. Remove empty elements.
     ips = ips.map(a => a.replace(/[^\d.-]/g,'')).filter((a) => a.length > 0);
-    
+
     for(var ip of ips){
         addresses.push(ipToNumber(ip));
     }
 
-    return calculateSubnet(addresses);
+    return calculateSubnet(addresses, mustBeUsableAddress, maxMaskSize);
 }
 
-function calculateSubnet(numbers: number[]){
+function calculateSubnet(addresses: number[], mustBeUsableAddress: boolean, maxMaskSize: number){
     var wildCard = 0;
     var netMask = Math.pow(2,32) - 1;
 
-    for(var maskBits = 32; maskBits >= 0; maskBits--){
-        var nSet = new Set(numbers);
+    if(mustBeUsableAddress){
+        // Add +1 to the largest address and -1 to the smallest so that we ensure that the broadcast and base address are not one of the input addresses.
+        var largest = Math.max.apply(null, addresses);
+        var smallest = Math.min.apply(null, addresses);
 
-        if (nSet.size <= 1){
+        addresses.push(largest + 1, smallest - 1);
+    }
+
+    for(var maskBits = 32; maskBits > 0; maskBits--){
+        var nSet = new Set(addresses);
+
+        if (nSet.size <= 1 && maskBits <= maxMaskSize){
             break;
         }
 
@@ -25,10 +34,10 @@ function calculateSubnet(numbers: number[]){
         wildCard <<= 1;
         wildCard += 1;
 
-        numbers.forEach((n,i) => numbers[i] = n >> 1);
+        addresses.forEach((n,i) => addresses[i] = n >> 1);
     }
 
-    var baseAddress = numbers[0] << (32 - maskBits);
+    var baseAddress = addresses[0] << (32 - maskBits);
 
     return {
         baseAddress: numberToIp(baseAddress), 
@@ -39,7 +48,7 @@ function calculateSubnet(numbers: number[]){
         broadcast: numberToIp(baseAddress + wildCard),
         hostMin: numberToIp(baseAddress + 1),
         hostMax: numberToIp(baseAddress + wildCard - 1),
-        hostCount: wildCard - 1
+        hostCount: wildCard == 0 ? 0 : wildCard - 1 >>> 0
     }
 }
 
@@ -50,7 +59,7 @@ function ipToNumber(ip: string) {
         currentAddress <<= 8;
         currentAddress += parseInt(part);
     }
-    return currentAddress;
+    return currentAddress>>>0;
 }
 
 function numberToIp(ip: number) {

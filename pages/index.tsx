@@ -1,10 +1,8 @@
-import { Box, Center, Container, Divider, Heading, Link, Stack, Text } from '@chakra-ui/react'
-import { ExternalLinkIcon } from '@chakra-ui/icons'
+import { Box, Center, Heading, Text } from '@chakra-ui/react'
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import Footer from '../components/footer'
-import Card from '../components/card'
 import { useRouter } from 'next/router'
+import Card from '../components/card'
 
 const Home: NextPage = () => {
   var router = useRouter();
