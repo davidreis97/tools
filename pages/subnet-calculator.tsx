@@ -34,7 +34,7 @@ const SubnetCalculator: NextPage = () => {
                         <Text paddingBottom="1em" fontFamily="heading" color="gray.400" letterSpacing="wider" fontSize="xs" fontWeight="bold">INPUT</Text>
                         <Textarea placeholder={textAreaPlaceholder} resize="none" height="100%" onInput={evt => setIps(evt.currentTarget.value.split(/\r?\n/))} />
                     </Box>
-                    <Box display="flex" flexDirection="column" width="415px" padding="1em" borderRadius="xl" borderWidth="thin" borderColor="gray.600">
+                    <Box display="flex" flexDirection="column" width="460px" padding="1em" borderRadius="xl" borderWidth="thin" borderColor="gray.600">
                         <Text paddingBottom="1em" fontFamily="heading" color="gray.400" letterSpacing="wider" fontSize="xs" fontWeight="bold">OUTPUT</Text>
                         {/* The following piece of code is the reason why I'm not a frontend dev */}
                         <TableContainer>
